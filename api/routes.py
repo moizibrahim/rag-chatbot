@@ -7,31 +7,39 @@ from services.vectordb_service import (
 )
 from services.rag_service import generate_answer
 from services.keyword_search_service import build_index
+from services.embedding_service import generate_embeddings
 import os
 import time
 
 def upload_document(pdf_path):
 
     start = time.time()
-
     pages = extract_pages(pdf_path)
     print("PDF Extraction:", time.time() - start)
 
+    if len(pages) > 200:
+        print(
+            f"PDF has {len(pages)} pages."
+            "only the first 200 pages will be processed."
+        )
+        pages = pages[:200]
+
+    start = time.time()
     chunks = create_chunks(pages)
     print("Chunking:", time.time() - start)
+
     print("PDF:", os.path.basename(pdf_path))
     print("Total Pages:", len(pages))
     print("Total Chunks:", len(chunks))
 
     start = time.time()
+    texts = [
+        chunk["text"]
+        for chunk in chunks
+    ]
 
-    embeddings = []
-
-    for chunk in chunks:
-        embeddings.append(
-            generate_embedding(chunk["text"])
-        )
-    print("Embedding:", time.time() - start)
+    embeddings = generate_embeddings(texts)
+    print("Embeddings:", time.time() - start)
 
     start = time.time()
     store_chunks(

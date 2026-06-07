@@ -8,3 +8,12 @@ model = SentenceTransformer(
 def generate_embedding(text):
 
     return model.encode(text).tolist()
+
+
+def generate_embeddings(texts):
+
+    return model.encode(
+        texts,
+        batch_size=32,
+        show_progress_bar=True
+    ).tolist()

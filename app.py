@@ -12,25 +12,37 @@ st.title(
     "Enterprise RAG Chatbot"
 )
 
+if "current_file" not in st.session_state:
+    st.session_state.current_file = None
+
+if "document_processed" not in st.session_state:
+    st.session_state.document_processed = False
+
 uploaded_file = st.file_uploader(
     "Upload PDF",
     type=["pdf"]
 )
-
 if uploaded_file:
 
-    file_path = (
-        f"uploads/{uploaded_file.name}"
-    )
+    if st.session_state.current_file != uploaded_file.name:
 
-    with open(file_path, "wb") as f:
-        f.write(uploaded_file.read())
+        st.session_state.current_file = uploaded_file.name
+        st.session_state.document_processed = False
 
-    upload_document(file_path)
+    if not st.session_state.document_processed:
 
-    st.success(
-        "Document processed successfully"
-    )
+        file_path = f"uploads/{uploaded_file.name}"
+
+        with open(file_path, "wb") as f:
+            f.write(uploaded_file.read())
+
+        upload_document(file_path)
+
+        st.session_state.document_processed = True
+
+        st.success(
+            "Document processed successfully"
+        )
 
 question = st.text_input(
     "Ask Question"
