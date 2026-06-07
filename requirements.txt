@@ -7,3 +7,4 @@ openai
 pypdf
 python-dotenv
 google-generativeai
+rank-bm25
