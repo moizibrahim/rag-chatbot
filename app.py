@@ -60,6 +60,6 @@ if st.button("Ask"):
 
     for source in result["sources"]:
 
-        st.write(
-            f'{source["source"]} - Page {source["page"]}'
+        st.markdown(
+            f'{source.get("source","Unknown")} - Page {source.get("page","?")}'
         )

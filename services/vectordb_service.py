@@ -8,7 +8,19 @@ client = chromadb.PersistentClient(
 collection = client.get_or_create_collection(
     name="documents"
 )
+def clear_collection():
 
+    global collection
+
+    client.delete_collection(
+        name="documents"
+    )
+
+    collection = client.get_or_create_collection(
+        name="documents"
+    )
+
+    print("Collection cleared")
 
 def store_chunks(chunks, embeddings, source_file):
 

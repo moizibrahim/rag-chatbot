@@ -18,12 +18,20 @@ def build_index(chunks):
     ]
 
     bm25 = BM25Okapi(tokenized_docs)
+    print("BM25 Index CREATED")
+    print("Documents:", len(documents))
 
 
 def keyword_search(query, top_k=3):
-
+    
     global bm25
     global documents
+
+    if bm25 is None:
+        print("BM25 not initialized")
+        return []
+
+    print("BM25 Object:", bm25)
 
     tokenized_query = re.findall(r"\w+", query.lower())
 

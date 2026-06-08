@@ -1,4 +1,5 @@
 from pypdf import PdfReader
+from services.text_cleaner import remove_repeated_headers
 
 def extract_pages(pdf_path):
 
@@ -14,5 +15,6 @@ def extract_pages(pdf_path):
                 "text": page.extract_text()
             }
         )
+    pages = remove_repeated_headers(pages)
 
     return pages
